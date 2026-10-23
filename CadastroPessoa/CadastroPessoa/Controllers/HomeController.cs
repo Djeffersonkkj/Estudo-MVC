@@ -1,0 +1,14 @@
+using CadastroPessoa.Models;
+using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
+
+namespace CadastroPessoa.Controllers
+{
+    public class HomeController : Controller
+    {
+        public IActionResult Index()
+        {
+            return View();
+        }
+    }
+}
