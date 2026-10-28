@@ -1,0 +1,74 @@
+@model List<SistemaBarbearia.Models.Cronometro>
+
+@{
+    ViewData["Title"] = "Cronômetros";
+}
+
+<h1>Meus cronômetros</h1>
+
+<form asp-controller="Cronometro" asp-action="Adicionar" method="post">
+    <label for="nome">Nome do cronômetro:</label>
+    <input type="text" id="nome" name="nome" required />
+
+    <button type="submit">Iniciar cronometragem</button>
+</form>
+
+<hr />
+
+<h2>Lista de cronômetros</h2>
+
+@if (Model.Count == 0)
+{
+    <p>Nenhum cronômetro cadastrado.</p>
+}
+else if (Model.Count > 0)
+{
+    <ul>
+        @for (int i = 0; i < Model.Count; i++)
+        {
+            <li>
+                <strong>@Model[i].Nome</strong>
+                - <span class="tempo" data-segundos="@Model[i].Segundos"
+                    data-pausado="@Model[i].Pausado.ToString().ToLowerInvariant()">
+                @Model[i]
+            </span>
+
+            <span>
+                @(Model[i].Pausado ? "Pausado" : "Em execução")
+            </span>
+
+            <form asp-controller="Cronometro" asp-action="Pausar" method="post">
+                <input type="hidden" name="indice" value="@i" />
+
+                <button type="submit">
+                    @(Model[i].Pausado ? "Continuar" : "Pausar")
+                </button>
+            </form>
+        </li>
+    }
+</ul>
+}
+
+<script>
+    document.querySelectorAll(".tempo").forEach(function (elemento) {
+        let segundos = Number(elemento.dataset.segundos);
+        const pausado = elemento.dataset.pausado === "true";
+
+        setInterval(function () {
+            if (pausado) {
+                return;
+            }
+
+            segundos++;
+
+            const horas = Math.floor(segundos / 3600);
+            const minutos = Math.floor((segundos % 3600) / 60);
+            const segundosRestantes = segundos % 60;
+
+            elemento.textContent =
+                String(horas).padStart(2, "0") + ":" +
+                String(minutos).padStart(2, "0") + ":" +
+                String(segundosRestantes).padStart(2, "0");
+        }, 1000);
+    });
+</script>
