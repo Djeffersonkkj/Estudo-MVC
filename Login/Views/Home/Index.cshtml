@@ -41,15 +41,14 @@
     .login-button:active { transform: translateY(-1px) scale(.98); }
     .login-button:focus-visible { outline: 2px solid #c4cbff; outline-offset: 4px; }
     .login-note { margin: 24px 0 0; text-align: center; font-size: 14px; }
-    .login-note a { display: inline-block; padding: 5px 8px; border-radius: 6px; color: #ded9e8;
-        font-weight: 600; text-decoration: none; transition: color .2s ease, background-color .2s ease, transform .2s ease; }
-    .login-note a:hover { color: #fff; background: rgba(255,255,255,.14); text-decoration: underline; transform: translateY(-1px); }
-    .login-note a:focus-visible { color: #fff; outline: 2px solid #c4cbff; outline-offset: 2px; }
+    .login-note a { color: #e0f8fb; font-weight: 650; text-decoration: none; }
+    .login-note a:hover { color: white; text-decoration: underline; }
+    .login-note a:focus-visible { color: white; outline: 2px solid #b5f0f5; outline-offset: 2px; }
     @@media (max-width: 480px) { .login-card { min-height: 510px; padding: 32px 24px; } }
     @@media (prefers-reduced-motion: reduce) {
         .login-card { animation: none; }
         .login-page::before { transition: none; }
-        .login-button, .login-note a { transition: none; }
+        .login-button { transition: none; }
     }
 </style>
 
