@@ -1,0 +1,86 @@
+@{
+    ViewData["Title"] = "Criar conta";
+}
+
+<style>
+    html, body { min-height: 100%; overflow-x: hidden; }
+    body { min-height: 100vh; min-height: 100dvh; margin: 0; overflow: hidden; background: #101326; }
+    body > header, body > footer { display: none; }
+    body > .container { max-width: none; padding: 0; }
+    body > .container > main { padding: 0 !important; }
+    .register-page {
+        min-height: 100vh; min-height: 100dvh; box-sizing: border-box; display: grid; place-items: center; padding: 24px 20px;
+        position: relative; overflow: hidden;
+        color: #fff; font-family: "Segoe UI", sans-serif;
+        background: radial-gradient(ellipse at 78% 82%, #63a5bd 0, transparent 36%),
+                    radial-gradient(ellipse at 22% 15%, #48294f 0, transparent 43%),
+                    linear-gradient(135deg, #17152c, #20223b 55%, #162536);
+    }
+    .register-page::before { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: 0;
+        background: linear-gradient(135deg, #19102b, #251329 55%, #17172f); transition: opacity .85s ease; }
+    .register-page.from-login::before { opacity: 1; }
+    .register-card {
+        position: relative; box-sizing: border-box; min-height: 510px;
+        width: min(100%, 440px); padding: 42px; border: 1px solid rgba(255,255,255,.2);
+        border-radius: 28px; background: rgba(255,255,255,.11); backdrop-filter: blur(18px);
+        box-shadow: 0 24px 70px rgba(0,0,0,.28); animation: register-card-enter .4s ease both;
+    }
+    @@keyframes register-card-enter { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .register-card h1 { margin: 0 0 8px; font-size: 30px; font-weight: 650; }
+    .register-card .intro { margin: 0 0 26px; color: #d2d8e5; }
+    .register-field { display: block; margin: 0 0 17px; color: #eef0f7; font-size: 14px; }
+    .register-field input { display: block; width: 100%; margin-top: 8px; padding: 13px 14px; color: white;
+        border: 1px solid rgba(255,255,255,.28); border-radius: 10px; outline: none; background: rgba(12,18,35,.3); }
+    .register-field input::placeholder { color: #b7becd; }
+    .register-field input:focus { border-color: #a5e5ef; box-shadow: 0 0 0 3px rgba(165,229,239,.16); }
+    .register-button { width: 100%; margin-top: 6px; padding: 14px; border: 0; border-radius: 11px;
+        color: white; font-weight: 700; letter-spacing: .08em; cursor: pointer;
+        background: linear-gradient(100deg,#653866,#258ca4); transition: transform .2s ease, box-shadow .2s ease; }
+    .register-button:hover { transform: translateY(-3px); box-shadow: 0 10px 24px rgba(53,156,179,.35); }
+    .register-button:active { transform: translateY(-1px) scale(.98); }
+    .register-button:focus-visible { outline: 2px solid #b5f0f5; outline-offset: 4px; }
+    .register-note { margin: 22px 0 0; text-align: center; font-size: 14px; }
+    .register-note a { color: #e0f8fb; font-weight: 650; text-decoration: none; }
+    .register-note a:hover { color: white; text-decoration: underline; }
+    @@media (max-width: 480px) { .register-card { min-height: 510px; padding: 32px 24px; } }
+    @@media (prefers-reduced-motion: reduce) {
+        .register-card { animation: none; }
+        .register-page::before { transition: none; }
+        .register-button { transition: none; }
+    }
+</style>
+
+<section class="register-page">
+    <div class="register-card">
+        <h1>Crie sua conta</h1>
+        <p class="intro">Preencha seus dados para começar.</p>
+
+        <form>
+            <label class="register-field">Nome completo
+                <input type="text" name="nome" placeholder="Como podemos te chamar?" />
+            </label>
+            <label class="register-field">E-mail
+                <input type="email" name="email" placeholder="voce@exemplo.com" />
+            </label>
+            <label class="register-field">Senha
+                <input type="password" name="senha" placeholder="Crie uma senha" />
+            </label>
+            <label class="register-field">Confirmar senha
+                <input type="password" name="confirmarSenha" placeholder="Digite a senha novamente" />
+            </label>
+            <button class="register-button" type="button">CRIAR</button>
+        </form>
+
+        <p class="register-note"><a asp-controller="Home" asp-action="Index">Já possui uma conta? Entrar</a></p>
+    </div>
+</section>
+
+<script>
+    const previousScreen = sessionStorage.getItem("login-screen-transition");
+    if (previousScreen === "login") document.querySelector(".register-page")?.classList.add("from-login");
+    sessionStorage.removeItem("login-screen-transition");
+    document.querySelector(".register-note a")?.addEventListener("click", () => {
+        sessionStorage.setItem("login-screen-transition", "register");
+    });
+    if (previousScreen === "login") requestAnimationFrame(() => requestAnimationFrame(() => document.querySelector(".register-page")?.classList.remove("from-login")));
+</script>

@@ -1,0 +1,83 @@
+@{
+    ViewData["Title"] = "Entrar";
+}
+
+<style>
+    html, body { min-height: 100%; overflow-x: hidden; }
+    body { min-height: 100vh; min-height: 100dvh; margin: 0; overflow: hidden; background: #100d20; }
+    body > header, body > footer { display: none; }
+    body > .container { max-width: none; padding: 0; }
+    body > .container > main { padding: 0 !important; }
+    .login-page {
+        min-height: 100vh; min-height: 100dvh; box-sizing: border-box; display: grid; place-items: center; padding: 24px 20px;
+        position: relative; overflow: hidden;
+        color: #fff; font-family: "Segoe UI", sans-serif;
+        background: radial-gradient(ellipse at 78% 82%, #7289e8 0, transparent 36%),
+                    radial-gradient(ellipse at 22% 15%, #4b173f 0, transparent 43%),
+                    linear-gradient(135deg, #19102b, #251329 55%, #17172f);
+    }
+    .login-page::before { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: 0;
+        background: linear-gradient(135deg, #17152c, #20223b 55%, #162536); transition: opacity .85s ease; }
+    .login-page.from-register::before { opacity: 1; }
+    .login-card {
+        position: relative; box-sizing: border-box; min-height: 510px;
+        width: min(100%, 440px); padding: 42px; border: 1px solid rgba(255,255,255,.2);
+        border-radius: 28px; background: rgba(255,255,255,.11); backdrop-filter: blur(18px);
+        box-shadow: 0 24px 70px rgba(0,0,0,.28); animation: login-card-enter .4s ease both;
+    }
+    @@keyframes login-card-enter { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .login-card h1 { margin: 0 0 8px; font-size: 30px; font-weight: 650; }
+    .login-card .intro { margin: 0 0 30px; color: #d3cddd; }
+    .login-field { display: block; margin: 0 0 20px; color: #eeeaf4; font-size: 14px; }
+    .login-field input { display: block; width: 100%; margin-top: 8px; padding: 13px 14px; color: white;
+        border: 1px solid rgba(255,255,255,.28); border-radius: 10px; outline: none; background: rgba(15,12,29,.28); }
+    .login-field input::placeholder { color: #c6c1d0; }
+    .login-field input:focus { border-color: #a9b5ff; box-shadow: 0 0 0 3px rgba(169,181,255,.16); }
+    .login-button { width: 100%; margin-top: 6px; padding: 14px; border: 0; border-radius: 11px;
+        color: white; font-weight: 700; letter-spacing: .08em; cursor: pointer;
+        background: linear-gradient(100deg,#64113f,#526de0); background-size: 140% 100%;
+        transition: transform .2s ease, box-shadow .2s ease, background-position .35s ease; }
+    .login-button:hover { transform: translateY(-3px); background-position: 100% 0; box-shadow: 0 10px 24px rgba(91,89,210,.38); }
+    .login-button:active { transform: translateY(-1px) scale(.98); }
+    .login-button:focus-visible { outline: 2px solid #c4cbff; outline-offset: 4px; }
+    .login-note { margin: 24px 0 0; text-align: center; font-size: 14px; }
+    .login-note a { display: inline-block; padding: 5px 8px; border-radius: 6px; color: #ded9e8;
+        font-weight: 600; text-decoration: none; transition: color .2s ease, background-color .2s ease, transform .2s ease; }
+    .login-note a:hover { color: #fff; background: rgba(255,255,255,.14); text-decoration: underline; transform: translateY(-1px); }
+    .login-note a:focus-visible { color: #fff; outline: 2px solid #c4cbff; outline-offset: 2px; }
+    @@media (max-width: 480px) { .login-card { min-height: 510px; padding: 32px 24px; } }
+    @@media (prefers-reduced-motion: reduce) {
+        .login-card { animation: none; }
+        .login-page::before { transition: none; }
+        .login-button, .login-note a { transition: none; }
+    }
+</style>
+
+<section class="login-page">
+    <div class="login-card">
+        <h1>Bem-vindo de volta</h1>
+        <p class="intro">Entre com seus dados para continuar.</p>
+
+        <form>
+            <label class="login-field">E-mail
+                <input type="email" name="email" placeholder="voce@exemplo.com" />
+            </label>
+            <label class="login-field">Senha
+                <input type="password" name="senha" placeholder="Digite sua senha" />
+            </label>
+            <button class="login-button" type="button">ENTRAR</button>
+        </form>
+
+        <p class="login-note"><a asp-controller="Home" asp-action="CriarConta">Não possui uma conta? Criar</a></p>
+    </div>
+</section>
+
+<script>
+    const previousScreen = sessionStorage.getItem("login-screen-transition");
+    if (previousScreen === "register") document.querySelector(".login-page")?.classList.add("from-register");
+    sessionStorage.removeItem("login-screen-transition");
+    document.querySelector(".login-note a")?.addEventListener("click", () => {
+        sessionStorage.setItem("login-screen-transition", "login");
+    });
+    if (previousScreen === "register") requestAnimationFrame(() => requestAnimationFrame(() => document.querySelector(".login-page")?.classList.remove("from-register")));
+</script>
